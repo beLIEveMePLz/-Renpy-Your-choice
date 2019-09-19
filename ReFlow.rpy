@@ -142,15 +142,15 @@ init python:
         
         @property                       # properting for easy use
         def wk(self):                   # [clk.wk] ---> weekday name
-            return self._weekday
+            return self._weekday                                    #Still not working
 
         @property
-        def sz(self):
+        def sz(self):                                    #Still not working
             season = str(self._season)
             return season[:]           
         
         @property
-        def dt(self):
+        def dt(self):                                    #Still not working
             daytime = str(self._daytime)
             return daytime[:]
                      
