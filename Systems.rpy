@@ -1,109 +1,253 @@
-#  _____                      _                   
-# |     |                    | |                  
-#   | |  _ ____   _____ _ __ | |_ ___  _ __ _   _ 
-#   | | | '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |
-#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |
-# |_____|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |
-#                                            __/ |
-#                                           |___/ 
-######################################################################
 
 
-                                                                       
-                  
-python :
+ #  _______ _                                  _    _____      _                _            
+ # |__   __(_)                                | |  / ____|    | |              | |           
+ #    | |   _ _ __ ___   ___    __ _ _ __   __| | | |     __ _| | ___ _ __   __| | __ _ _ __ 
+ #    | |  | | '_ ` _ \ / _ \  / _` | '_ \ / _` | | |    / _` | |/ _ \ '_ \ / _` |/ _` | '__|
+ #    | |  | | | | | | |  __/ | (_| | | | | (_| | | |___| (_| | |  __/ | | | (_| | (_| | |   
+ #    |_|  |_|_| |_| |_|\___|  \__,_|_| |_|\__,_|  \_____\__,_|_|\___|_| |_|\__,_|\__,_|_|   
+ #
+ ############################################################################################                                                                                         
+ 
+
+init python:
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
+    seasons = ["Winter", "Spring", "Summer", "Autumn"]
+    
+
+    class Clock(object):
+        def __init__(self, year, month, day, hour, minute, second, millisecond, weekday, season, daytime):
+            self._year = year 
+            self._month = month 
+            self._day = day 
+            self._hour = hour 
+            self._minute = minute 
+            self._second = second 
+            self._millisecond= millisecond
+            self._weekday = weekday
+            self._season = season
+            self._daytime = daytime 
+             
+            
+        def add(self , hours , minutes , seconds, milliseconds):
+
+            if self._month < 3 :                                    # Week day segment
+                __m = self._month + 12
+                __y = self._year - 1
+            else :
+                __m = self._month
+                __y = self._year
+            __weekday = ((__y+__y/4-__y/100+__y/400+(13*__m+8)/5+self._day) % 7) - 1
+            self._weekday = weekdays[__weekday]
+
+            self._millisecond += milliseconds
+            self._second += seconds                         #Adding time segment
+            self._minute += minutes
+            self._hour += hours
+
+            self._second += self._millisecond // 1000
+            self._minute += self._second // 60
+            self._hour += self._minute // 60
+            self._day += self._hour // 24
+
+            if self._month in (1,3,5,7,8,10,12):            # Limit day segment
+                if self._day > 31:
+                    self._day = 1
+                    self._month += 1
+            elif self._month in (4,6,9,11):
+                if self._day > 30:
+                    self._day = 1
+                    self._month += 1
+            else :
+                if (self._year % 4) == 0 and (self._year % 100) != 0 or (self._year % 400) == 0:
+                    __d = 29                     
+                else:
+                    __d = 28
+
+                if self._day > __d:
+                    self._day = 1
+                    self._month += 1
+
+            if self._month > 12:
+                self._month = 1
+                self._year += 1
+            
+            self._millisecond = self._millisecond % 1000
+            self._second = self._second % 60
+            self._minute = self._minute % 60
+            self._hour = self._hour % 24
+
+
+            if self._month in (12,1,2):
+                self._season = seasons[0]
+                if self._hour == 0:
+                    self._daytime = daytimes[0]
+                if self._hour > 0 and self._hour < 7:
+                    self._daytime = daytimes[1]
+                if self._hour > 7 and self._hour < 8:
+                    self._daytime = daytimes[2]
+                if self._hour > 8 and self._hour < 11:
+                    self._daytime = daytimes[3]
+                if self._hour == 12:
+                    self._daytime = daytimes[4]
+                if self._hour >= 13 and self._hour < 16:
+                    self._daytime = daytimes[5]
+                if self._hour > 16 and self._hour < 17:
+                    self._daytime = daytimes[6]
+                if self._hour > 17 and self._hour < 24:
+                    self._daytime = daytimes[7]
+            if self._month in (3,4,5):
+                self._season = seasons[1]
+                if self._hour == 0:
+                    self._daytime = daytimes[0]
+                if self._hour > 0 and self._hour < 5:
+                    self._daytime = daytimes[1]
+                if self._hour > 5 and self._hour < 6:
+                    self._daytime = daytimes[2]
+                if self._hour > 6 and self._hour < 11:
+                    self._daytime = daytimes[3]
+                if self._hour == 12:
+                    self._daytime = daytimes[4]
+                if self._hour >= 13 and self._hour < 18:
+                    self._daytime = daytimes[5]
+                if self._hour > 18 and self._hour < 19:
+                    self._daytime = daytimes[6]
+                if self._hour > 19 and self._hour < 24:
+                    self._daytime = daytimes[7]
+            if self._month in (6,7,8):
+                self._season = seasons[2]
+                if self._hour == 0:
+                    self._daytime = daytimes[0]
+                if self._hour > 0 and self._hour < 4:
+                    self._daytime = daytimes[1]
+                if self._hour > 4 and self._hour < 5:
+                    self._daytime = daytimes[2]
+                if self._hour > 5 and self._hour < 11:
+                    self._daytime = daytimes[3]
+                if self._hour == 12:
+                    self._daytime = daytimes[4]
+                if self._hour >= 13 and self._hour < 20:
+                    self._daytime = daytimes[5]
+                if self._hour > 20 and self._hour < 21:
+                    self._daytime = daytimes[6]
+                if self._hour > 21 and self._hour < 24:
+                    self._daytime = daytimes[7]
+            if self._month in (9,10,11):
+                self._season = seasons[3]
+                if self._hour == 0:
+                    self._daytime = daytimes[0]
+                if self._hour > 0 and self._hour < 5:
+                    self._daytime = daytimes[1]
+                if self._hour > 5 and self._hour < 6:
+                    self._daytime = daytimes[2]
+                if self._hour > 6 and self._hour < 11:
+                    self._daytime = daytimes[3]
+                if self._hour == 12:
+                    self._daytime = daytimes[4]
+                if self._hour >= 13 and self._hour < 18:
+                    self._daytime = daytimes[5]
+                if self._hour > 18 and self._hour < 19:
+                    self._daytime = daytimes[6]
+                if self._hour > 19 and self._hour < 24:
+                    self._daytime = daytimes[7]
+
+
+        
+        @property                       # properting for easy use
+        def wk(self):                   # [clk.wk] ---> weekday name
+            return self._weekday
+
+        @property
+        def sz(self):
+            season = str(self._season)
+            return season           
+        
+        @property
+        def dt(self):
+            daytm = str(self._daytime)
+            return daytm
+                     
+        @property
+        def yy(self): 
+            year = "000" + str(self._year)
+            return year[-4:]        
+              
+        @property
+        def mn(self):
+            month = "0" + str(self._month)
+            return month[-2:]
+                
+        @property
+        def dd(self): 
+            day = "0" + str(self._day)
+            return day[-2:]
+        
+        @property
+        def hh(self):
+            hour = "0" + str(self._hour)
+            return hour[-2:] 
+
+        @property
+        def mm(self): 
+            minute = "0" + str(self._minute)
+            return minute[-2:]
+        
+        @property
+        def ss(self):
+            second = "0" + str(self._second)
+            return second[-2:]
+
+
+        @property
+        def ms(self):
+            millisecond = "000" + str(self._millisecond)
+            return millisecond[-4:]
+
+
+#def __init__(self, year, m, da, ho, m, s, m,ms)   
+default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime")
+
+#######################################################
+#  _____                      _                       #
+# |     |                    | |                      #
+#   | |  _ ____   _____ _ __ | |_ ___  _ __ _   _     #
+#   | | | '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |    #
+#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |    #
+# |_____|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |    #
+#                                            __/ |    #
+#                                           |___/     #
+#                                                     #
+#######################################################
+
     class Item(object):
         def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image):
-            self.name = name            #1 Nazwa        
-            self.quantity = quantity    #2 Ilość
-            self.volume = volume        #3 Objetosc
-            self.size = size            #4 Rozmiar    
-            self.weight = weight        #5 Ciężar
-            self.spiece = spiece        #6 Rodzaj   
+            self.name = name            #1 Nazwa                  Name of item for identification purpose
+            self.quantity = quantity    #2 Ilość                  Amount of items we have                               Ex. 15xbatteries
+            self.volume = volume        #3 Objetosc               Amount of volume taken from Container                 all items(volume)<=max_volume
+            self.size = size            #4 Rozmiar                Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
+            self.weight = weight        #5 Ciężar                 Strengh(actual_max_weight)=>weight<max weight container
+            self.spiece = spiece        #6 Rodzaj                 Type of item
             self.info = info            #7 Informacje   
             self.price = price          #8 Cena
             self.craft = craft          #9 Tworzenie
             self.thumb = thumb          #10 Miniaturka
             self.image = image          #11 Obrazek         
-            
-            # 1 Name
-            # Name of item for identification purpose
-
-            # 2 Quantity
-            # Amount of items we have
-            # Ex. 15xbatteries
-
-            # 3 Volume
-            # Amount of volume taken from Container
-            # all items(volume)<=max_volume
-
-            # 4 Size
-            # Size type for logical fit it to container
-            # (huge, big, medium, small, tiny) 
-            # big items can not fit to small container
-            # small can fit to big, medium and small container size
-            # 1 huge = 2 big = 4 medium = 6 small = 10 tiny
-            # huge>big>medium>small>tiny
-            
-            # 5 Weight
-            # Weight of 1 Item 
-            # containers have capability of max weight of themself
-            # Player must have enough sterngh to pic up enough
-            # Strengh(actual_max_weight)=>weight<max weight container
-
-            # 6 Spiece
-            # Type of item
-            # Static, useful, eatable 
-
-            # 7 Info
-            # Simple info about Item
-            # Hover window best scenario
-
-            # 8 Price
-            # The price of Item
-
-            # 9 Craft
-            # For crafting purpose
-
-            # 10 Thumb
-            # Placeholder for thumbinal wiev of item
-
-            # 11 Image
-            # Full wiev of item
-
-
 
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image, ):
-            self.inventory = []             # List for items
-            self.max_size = max_size 
+            self.inventory = []                 # List for items
+            self.max_size = max_size            # 
             self.max_volume = max_volume        # Max amount of total volume of items
             self.max_weight = max_weight    
             self.spiece = spiece
             self.image = image
 
-
-
-        def add_item(self, item):
-            self.inventory.append(item)
-
+        def add(Item):
+            pass
 
 
 
+            
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                     
