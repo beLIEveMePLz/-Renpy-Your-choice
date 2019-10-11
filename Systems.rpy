@@ -256,7 +256,7 @@ init python:
     Winds = ("Without", "Light", "Medium", "Strong", "Hurracane")
     Clouds = ("Sunny", "Slightly Cloudy", "Cloudly", "Overcast" )
     Atmosperics = ("Clear", "Breeze", "Rain", "Storm")
-    Temp_dict = []
+    Temp_list = []
     Weather_days = ["Today","Tomorrow","2nday","3rday","4tday","5tday","6tday","7tday","8tday","9tday","10tday"] 
     
 
@@ -309,8 +309,12 @@ init python:
                 min_temp = -256
                 max_temp = 1450
 
-            if Temp_dict is None:
-                while Temp_dict < 11
+            if Temp_list is None:
+                while len(Temp_list) < 11:
+                    day_temp = random.randrange(min_temp, max_temp)
+                    Temp_list.append(day_temp)
+                    
+                    
 
 
 
