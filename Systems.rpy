@@ -1,5 +1,5 @@
 
-
+ #FONT DOOM
  #  _______ _                                  _    _____      _                _            
  # |__   __(_)                                | |  / ____|    | |              | |           
  #    | |   _ _ __ ___   ___    __ _ _ __   __| | | |     __ _| | ___ _ __   __| | __ _ _ __ 
@@ -7,17 +7,33 @@
  #    | |  | | | | | | |  __/ | (_| | | | | (_| | | |___| (_| | |  __/ | | | (_| | (_| | |   
  #    |_|  |_|_| |_| |_|\___|  \__,_|_| |_|\__,_|  \_____\__,_|_|\___|_| |_|\__,_|\__,_|_|   
  #
- ############################################################################################                                                                                         
+ ############################################################################################
+
+ # In "Time and Calendar" section simply count time flow. Time is counted from 
+ #    @ miliseconds - use for quests "time is runnin"
+ #    @ seconds minutes hours - use for normal time counting
+ #    @ days months year - use for calendar purpose including leap year
+ #    @ season - use for changing daytime during season like in winter dusk comes faster than in summer
+ #    @ daytimes weekdays- use for depend on it a schelude of player and npc
+
+ # This section works fine
+
+ # To do:
+ # >>Make an reset miliseconds if it is not an a quests
+ # >>make an a counter from actual miliseconds to how much more miliseconds left
+ # >>make a schelude section
+                                                                                         
  
 
 init python:
-    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
+    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     seasons = ["Winter", "Spring", "Summer", "Autumn"]
     
 
     class Clock(object):
-        def __init__(self, year, month, day, hour, minute, second, millisecond, weekday, season, daytime):
+        def __init__(self, year, month, day, hour, minute, second, millisecond, weekday, season, daytime, weekend):
             self._year = year 
             self._month = month 
             self._day = day 
@@ -28,6 +44,7 @@ init python:
             self._weekday = weekday
             self._season = season
             self._daytime = daytime 
+            self._weekend = weekend
              
             
         def add(self , hours , minutes , seconds, milliseconds):
@@ -39,6 +56,13 @@ init python:
                 __m = self._month
                 __y = self._year
             __weekday = ((__y+__y/4-__y/100+__y/400+(13*__m+8)/5+self._day) % 7) - 1
+            if __weekday == 5:
+                self._weekend = True
+            elif __weekday == 6:
+                self._weekend = True
+            else:
+                self._weekend = False
+
             self._weekday = weekdays[__weekday]
 
             self._millisecond += milliseconds
@@ -153,10 +177,26 @@ init python:
                     self._daytime = daytimes[7]
 
 
+        @property
+        def nm(self):
+            name_month = str(months[self.month])
+            return name_month
+
+        def test(self):
+            
+            return __weekday
         
         @property                       # properting for easy use
         def wk(self):                   # [clk.wk] ---> weekday name
             return self._weekday
+
+        @property
+        def we(self):
+            if self._weekend:
+                weekend = "It's weekend"
+            else:
+                weekend = " "
+            return weekend
 
         @property
         def sz(self):
@@ -175,7 +215,7 @@ init python:
               
         @property
         def mn(self):
-            month = "0" + str(self._month)
+            month ="00" +str(self._month)
             return month[-2:]
                 
         @property
@@ -204,35 +244,132 @@ init python:
             millisecond = "000" + str(self._millisecond)
             return millisecond[-4:]
 
+# #################################################
+#  _    _            _   _               
+# | |  | |          | | | |              
+# | |  | | ___  __ _| |_| |__   ___ _ __ 
+# | |/\| |/ _ \/ _` | __| '_ \ / _ \ '__|
+# \  /\  /  __/ (_| | |_| | | |  __/ |   
+#  \/  \/ \___|\__,_|\__|_| |_|\___|_|   
+# ################################################
+    Temperatures = ("Freezing", "Cold", "Unconfortable", "Confortable", "Hot", "Scorcher")
+    Winds = ("Without", "Light", "Medium", "Strong", "Hurracane")
+    Clouds = ("Sunny", "Slightly Cloudy", "Cloudly", "Overcast" )
+    Atmosperics = ("Clear", "Breeze", "Rain", "Storm")
+    Temp_dict = []
+    Weather_days = ["Today","Tomorrow","2nday","3rday","4tday","5tday","6tday","7tday","8tday","9tday","10tday"] 
+    
 
-#def __init__(self, year, m, da, ho, m, s, m,ms)   
-default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime")
+    class Weather(Clock):
+        def __init__(self, temp_out, wind, cloud, phenomen):
+            self._temp_out = temp_out
+            self._wind = wind
+            self._cloud = cloud
+            self._phenomen = phenomen
+        
+        def change_weather(self, temperature_outside, actual_wind, actual_atmospheric, actual_phenomen):
+
+            if self._month == 1:
+                min_temp = -10
+                max_temp = 15
+            elif self._month == 2:
+                min_temp = -8
+                max_temp = 20
+            elif self._month == 3:
+                min_temp = -1
+                max_temp = 23
+            elif self._month == 4:
+                min_temp = 6
+                max_temp = 27
+            elif self._month == 5:
+                min_temp = 10
+                max_temp = 32
+            elif self._month == 6:
+                min_temp = 15
+                max_temp = 36
+            elif self._month == 7:
+                min_temp = 16
+                max_temp = 37
+            elif self._month == 8:
+                min_temp = 16
+                max_temp = 38
+            elif self._month == 9:
+                min_temp = 10
+                max_temp = 30
+            elif self._month == 10:
+                min_temp = 0
+                max_temp = 26
+            elif self._month == 11:
+                min_temp = -5
+                max_temp = 21
+            elif self._month == 12:
+                min_temp = -25
+                max_temp = 15
+            else:
+                min_temp = -256
+                max_temp = 1450
+
+            if Temp_dict is None:
+                while Temp_dict < 11
+
+
+
+            if self._hour == 0
+                day_temp = random.randrange(min_temp, max_temp)
+                if self._daytime == daytimes[0]:
+                    temp_dayt = day_temp -2 
+                elif self._daytime == daytimes[1]:
+                    temp_dayt = day_temp -5
+                elif self._daytime == daytimes[2]:
+                    temp_dayt = day_temp -6
+                elif self._daytime == daytimes[3]:
+                    temp_dayt = day_temp -3
+                elif self._daytime == daytimes[4]:
+                    temp_dayt = day_temp +3
+                elif self._daytime == daytimes[5]:
+                    temp_dayt = day_temp +5
+                elif self._daytime == daytimes[6]:
+                    temp_dayt = day_temp +2
+                elif self._daytime == daytimes[7]:
+                    temp_dayt = day_temp 
+
+
+
+        
+
+
+
+
+
+
 
 #######################################################
 #  _____                      _                       #
 # |     |                    | |                      #
 #   | |  _ ____   _____ _ __ | |_ ___  _ __ _   _     #
 #   | | | '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |    #
-#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |    #
+#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |    #[;/]
 # |_____|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |    #
 #                                            __/ |    #
 #                                           |___/     #
 #                                                     #
 #######################################################
 
+    sizes = ["Tiny", "Small", "Medium", "Big", "Huge"]
+
     class Item(object):
         def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image):
-            self.name = name            #1 Nazwa                  Name of item for identification purpose
-            self.quantity = quantity    #2 Ilość                  Amount of items we have                               Ex. 15xbatteries
-            self.volume = volume        #3 Objetosc               Amount of volume taken from Container                 all items(volume)<=max_volume
-            self.size = size            #4 Rozmiar                Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
-            self.weight = weight        #5 Ciężar                 Strengh(actual_max_weight)=>weight<max weight container
-            self.spiece = spiece        #6 Rodzaj                 Type of item
-            self.info = info            #7 Informacje   
-            self.price = price          #8 Cena
-            self.craft = craft          #9 Tworzenie
-            self.thumb = thumb          #10 Miniaturka
-            self.image = image          #11 Obrazek         
+            self.name = name            #1 Nazwa            Name of item for identification purpose
+            self.quantity = quantity    #2 Ilość            Amount of items we have                               Ex. 15xbatteries
+            self.volume = volume        #3 Objetosc         Amount of volume taken from Container                 all items(volume)<=max_volume
+            self.size = size            #4 Rozmiar          Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
+            self.weight = weight        #5 Ciężar           Strengh(actual_max_weight)=>weight<max weight container
+            self.spiece = spiece        #6 Rodzaj           Type of item
+            self.info = info            #7 Informacje       Infos         
+            self.price = price          #8 Cena             Price
+            self.craft = craft          #9 Tworzenie        Crafting
+            self.thumb = thumb          #10 Miniaturka      Thumbinal
+            self.image = image          #11 Obrazek         Bigger thumb 
 
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image, ):
@@ -245,9 +382,15 @@ default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime"
 
         def add(Item):
             pass
+            #if max_size == sizes[5]:
+
 
 
 
             
 
 
+
+#def __init__(self, year, m, da, ho, m, s, m,ms)   
+default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime", " ")
+# deflaut wea = Weather(22,"Light","Slightly Cloudy","Clear")
