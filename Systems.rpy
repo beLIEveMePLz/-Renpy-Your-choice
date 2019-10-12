@@ -303,7 +303,7 @@ init python:
                 min_temp = -256
                 max_temp = 1450
 
-            if Temp_list is None:
+            if Temp_list == 0:
                 while len(Temp_list) < 11:
                     day_temp = random.randrange(min_temp, max_temp)
                     Temp_list.append(day_temp)
@@ -393,4 +393,4 @@ init python:
 
 #def __init__(self, year, m, da, ho, m, s, m,ms)   
 default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime", " ")
-default wea = Weather(0)
+default wea = Weather(0, )
