@@ -23,7 +23,7 @@
  # >>make an a counter from actual miliseconds to how much more miliseconds left
  # >>make a schelude section
                                                                                          
- 
+
 
 init python:
     weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
@@ -56,14 +56,12 @@ init python:
                 __m = self._month
                 __y = self._year
             __weekday = ((__y+__y/4-__y/100+__y/400+(13*__m+8)/5+self._day) % 7) - 1
-            if __weekday == 5:
-                self._weekend = True
-            elif __weekday == 6:
+
+            self._weekday = weekdays[__weekday]
+            if self._weekday in ("Saturday","Sunday"):
                 self._weekend = True
             else:
                 self._weekend = False
-
-            self._weekday = weekdays[__weekday]
 
             self._millisecond += milliseconds
             self._second += seconds                         #Adding time segment
@@ -181,10 +179,6 @@ init python:
         def nm(self):
             name_month = str(months[self.month])
             return name_month
-
-        def test(self):
-            
-            return __weekday
         
         @property                       # properting for easy use
         def wk(self):                   # [clk.wk] ---> weekday name
@@ -195,7 +189,7 @@ init python:
             if self._weekend:
                 weekend = "It's weekend"
             else:
-                weekend = " "
+                weekend = "It's working day"
             return weekend
 
         @property
@@ -256,18 +250,18 @@ init python:
     Winds = ("Without", "Light", "Medium", "Strong", "Hurracane")
     Clouds = ("Sunny", "Slightly Cloudy", "Cloudly", "Overcast" )
     Atmosperics = ("Clear", "Breeze", "Rain", "Storm")
-    Temp_list = []
+    Temp_dict = []
     Weather_days = ["Today","Tomorrow","2nday","3rday","4tday","5tday","6tday","7tday","8tday","9tday","10tday"] 
     
 
     class Weather(Clock):
-        def __init__(self, temp_out, wind, cloud, phenomen):
-            self._temp_out = temp_out
-            self._wind = wind
-            self._cloud = cloud
-            self._phenomen = phenomen
+        def __init__(self, temp_out):#, wind, cloud, phenomen):
+            self.temp_out = temp_out
+            # self._wind = wind
+            # self._cloud = cloud
+            # self._phenomen = phenomen
         
-        def change_weather(self, temperature_outside, actual_wind, actual_atmospheric, actual_phenomen):
+        def change_weather(self, temp_out):#, actual_wind, actual_atmospheric, actual_phenomen):
 
             if self._month == 1:
                 min_temp = -10
@@ -313,29 +307,31 @@ init python:
                 while len(Temp_list) < 11:
                     day_temp = random.randrange(min_temp, max_temp)
                     Temp_list.append(day_temp)
-                    
-                    
-
-
-
-            if self._hour == 0
+            elif self._hour == 0:
+                Temp_list.pop(0)
                 day_temp = random.randrange(min_temp, max_temp)
-                if self._daytime == daytimes[0]:
-                    temp_dayt = day_temp -2 
-                elif self._daytime == daytimes[1]:
-                    temp_dayt = day_temp -5
-                elif self._daytime == daytimes[2]:
-                    temp_dayt = day_temp -6
-                elif self._daytime == daytimes[3]:
-                    temp_dayt = day_temp -3
-                elif self._daytime == daytimes[4]:
-                    temp_dayt = day_temp +3
-                elif self._daytime == daytimes[5]:
-                    temp_dayt = day_temp +5
-                elif self._daytime == daytimes[6]:
-                    temp_dayt = day_temp +2
-                elif self._daytime == daytimes[7]:
-                    temp_dayt = day_temp 
+                Temp_list.append(day_temp)
+            today_temp = Temp_list[0]
+            if self._daytime == daytimes[0]:
+                self.temp_out = today_temp -2 
+            elif self._daytime == daytimes[1]:
+                self.temp_out = today_temp -5
+            elif self._daytime == daytimes[2]:
+                self.temp_out = today_temp -6
+            elif self._daytime == daytimes[3]:
+                self.temp_out = today_temp -3
+            elif self._daytime == daytimes[4]:
+                self.temp_out = today_temp +3
+            elif self._daytime == daytimes[5]:
+                self.temp_out = today_temp +5
+            elif self._daytime == daytimes[6]:
+                self.temp_out = today_temp +2
+            elif self._daytime == daytimes[7]:
+                self.temp_out = today_temp 
+        @property
+        def temp(self):
+            Temperature = str(self.temp_out)
+            return Temperature
 
 
 
@@ -359,34 +355,34 @@ init python:
 #                                                     #
 #######################################################
 
-    sizes = ["Tiny", "Small", "Medium", "Big", "Huge"]
+    # sizes = ["Tiny", "Small", "Medium", "Big", "Huge"]
 
-    class Item(object):
-        def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image):
-            self.name = name            #1 Nazwa            Name of item for identification purpose
-            self.quantity = quantity    #2 Ilość            Amount of items we have                               Ex. 15xbatteries
-            self.volume = volume        #3 Objetosc         Amount of volume taken from Container                 all items(volume)<=max_volume
-            self.size = size            #4 Rozmiar          Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
-            self.weight = weight        #5 Ciężar           Strengh(actual_max_weight)=>weight<max weight container
-            self.spiece = spiece        #6 Rodzaj           Type of item
-            self.info = info            #7 Informacje       Infos         
-            self.price = price          #8 Cena             Price
-            self.craft = craft          #9 Tworzenie        Crafting
-            self.thumb = thumb          #10 Miniaturka      Thumbinal
-            self.image = image          #11 Obrazek         Bigger thumb 
+    # class Item(object):
+    #     def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image):
+    #         self.name = name            #1 Nazwa            Name of item for identification purpose
+    #         self.quantity = quantity    #2 Ilość            Amount of items we have                               Ex. 15xbatteries
+    #         self.volume = volume        #3 Objetosc         Amount of volume taken from Container                 all items(volume)<=max_volume
+    #         self.size = size            #4 Rozmiar          Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
+    #         self.weight = weight        #5 Ciężar           Strengh(actual_max_weight)=>weight<max weight container
+    #         self.spiece = spiece        #6 Rodzaj           Type of item
+    #         self.info = info            #7 Informacje       Infos         
+    #         self.price = price          #8 Cena             Price
+    #         self.craft = craft          #9 Tworzenie        Crafting
+    #         self.thumb = thumb          #10 Miniaturka      Thumbinal
+    #         self.image = image          #11 Obrazek         Bigger thumb 
 
-    class Container():
-        def __init__(self, max_size, max_volume, max_weight, spiece, info, image, ):
-            self.inventory = []                 # List for items
-            self.max_size = max_size            # 
-            self.max_volume = max_volume        # Max amount of total volume of items
-            self.max_weight = max_weight    
-            self.spiece = spiece
-            self.image = image
+    # class Container():
+    #     def __init__(self, max_size, max_volume, max_weight, spiece, info, image, ):
+    #         self.inventory = []                 # List for items
+    #         self.max_size = max_size            # 
+    #         self.max_volume = max_volume        # Max amount of total volume of items
+    #         self.max_weight = max_weight    
+    #         self.spiece = spiece
+    #         self.image = image
 
-        def add(Item):
-            pass
-            #if max_size == sizes[5]:
+    #     def add(Item):
+    #         pass
+    #         #if max_size == sizes[5]:
 
 
 
@@ -397,4 +393,4 @@ init python:
 
 #def __init__(self, year, m, da, ho, m, s, m,ms)   
 default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime", " ")
-# deflaut wea = Weather(22,"Light","Slightly Cloudy","Clear")
+default wea = Weather(0)
