@@ -22,18 +22,20 @@
  # >>Make an reset miliseconds if it is not an a quests
  # >>make an a counter from actual miliseconds to how much more miliseconds left
  # >>make a schelude section
-                                                                                         
-
 
 init python:
+    import datetime
+    import random
+    from math import floor
+
     weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
     months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     seasons = ["Winter", "Spring", "Summer", "Autumn"]
-    
+
 
     class Clock(object):
-        def __init__(self, year, month, day, hour, minute, second, millisecond, weekday, season, daytime, weekend):
+        def __init__(self, year, month, day, hour, minute, second, millisecond):
             self._year = year 
             self._month = month 
             self._day = day 
@@ -41,149 +43,65 @@ init python:
             self._minute = minute 
             self._second = second 
             self._millisecond= millisecond
-            self._weekday = weekday
-            self._season = season
-            self._daytime = daytime 
-            self._weekend = weekend
+            self._weekday = None
+            self._season = None
+            self._daytime = None
+            self._daytime_nr = None 
+            self._weekend = None
+            self._datetime = datetime.datetime(year, month, day, hour, minute, second, millisecond)
+            self.datetimeToClock()
              
-            
-        def add(self , hours , minutes , seconds, milliseconds):
-
-            if self._month < 3 :                                    # Week day segment
-                __m = self._month + 12
-                __y = self._year - 1
-            else :
-                __m = self._month
-                __y = self._year
-            __weekday = ((__y+__y/4-__y/100+__y/400+(13*__m+8)/5+self._day) % 7) - 1
-
+        def datetimeToClock(self):
+            self._year = self._datetime.year
+            self._month = self._datetime.month
+            self._day = self._datetime.day
+            self._hour = self._datetime.hour
+            self._minute = self._datetime.minute
+            self._second = self._datetime.second
+            self._millisecond = self._datetime.microsecond
+        
+            __weekday = self._datetime.weekday()
             self._weekday = weekdays[__weekday]
+    
             if self._weekday in ("Saturday","Sunday"):
                 self._weekend = True
             else:
                 self._weekend = False
-
-            self._millisecond += milliseconds
-            self._second += seconds                         #Adding time segment
-            self._minute += minutes
-            self._hour += hours
-
-            self._second += self._millisecond // 1000
-            self._minute += self._second // 60
-            self._hour += self._minute // 60
-            self._day += self._hour // 24
-
-            if self._month in (1,3,5,7,8,10,12):            # Limit day segment
-                if self._day > 31:
-                    self._day = 1
-                    self._month += 1
-            elif self._month in (4,6,9,11):
-                if self._day > 30:
-                    self._day = 1
-                    self._month += 1
-            else :
-                if (self._year % 4) == 0 and (self._year % 100) != 0 or (self._year % 400) == 0:
-                    __d = 29                     
-                else:
-                    __d = 28
-
-                if self._day > __d:
-                    self._day = 1
-                    self._month += 1
-
-            if self._month > 12:
-                self._month = 1
-                self._year += 1
+    
+            season_nr = int(floor((self._month % 12)/3))
+            self._season = seasons[season_nr]
             
-            self._millisecond = self._millisecond % 1000
-            self._second = self._second % 60
-            self._minute = self._minute % 60
-            self._hour = self._hour % 24
-
-
-            if self._month in (12,1,2):
-                self._season = seasons[0]
-                if self._hour == 0:
-                    self._daytime = daytimes[0]
-                if self._hour > 0 and self._hour < 7:
-                    self._daytime = daytimes[1]
-                if self._hour > 7 and self._hour < 8:
-                    self._daytime = daytimes[2]
-                if self._hour > 8 and self._hour < 11:
-                    self._daytime = daytimes[3]
-                if self._hour == 12:
-                    self._daytime = daytimes[4]
-                if self._hour >= 13 and self._hour < 16:
-                    self._daytime = daytimes[5]
-                if self._hour > 16 and self._hour < 17:
-                    self._daytime = daytimes[6]
-                if self._hour > 17 and self._hour < 24:
-                    self._daytime = daytimes[7]
-            if self._month in (3,4,5):
-                self._season = seasons[1]
-                if self._hour == 0:
-                    self._daytime = daytimes[0]
-                if self._hour > 0 and self._hour < 5:
-                    self._daytime = daytimes[1]
-                if self._hour > 5 and self._hour < 6:
-                    self._daytime = daytimes[2]
-                if self._hour > 6 and self._hour < 11:
-                    self._daytime = daytimes[3]
-                if self._hour == 12:
-                    self._daytime = daytimes[4]
-                if self._hour >= 13 and self._hour < 18:
-                    self._daytime = daytimes[5]
-                if self._hour > 18 and self._hour < 19:
-                    self._daytime = daytimes[6]
-                if self._hour > 19 and self._hour < 24:
-                    self._daytime = daytimes[7]
-            if self._month in (6,7,8):
-                self._season = seasons[2]
-                if self._hour == 0:
-                    self._daytime = daytimes[0]
-                if self._hour > 0 and self._hour < 4:
-                    self._daytime = daytimes[1]
-                if self._hour > 4 and self._hour < 5:
-                    self._daytime = daytimes[2]
-                if self._hour > 5 and self._hour < 11:
-                    self._daytime = daytimes[3]
-                if self._hour == 12:
-                    self._daytime = daytimes[4]
-                if self._hour >= 13 and self._hour < 20:
-                    self._daytime = daytimes[5]
-                if self._hour > 20 and self._hour < 21:
-                    self._daytime = daytimes[6]
-                if self._hour > 21 and self._hour < 24:
-                    self._daytime = daytimes[7]
-            if self._month in (9,10,11):
-                self._season = seasons[3]
-                if self._hour == 0:
-                    self._daytime = daytimes[0]
-                if self._hour > 0 and self._hour < 5:
-                    self._daytime = daytimes[1]
-                if self._hour > 5 and self._hour < 6:
-                    self._daytime = daytimes[2]
-                if self._hour > 6 and self._hour < 11:
-                    self._daytime = daytimes[3]
-                if self._hour == 12:
-                    self._daytime = daytimes[4]
-                if self._hour >= 13 and self._hour < 18:
-                    self._daytime = daytimes[5]
-                if self._hour > 18 and self._hour < 19:
-                    self._daytime = daytimes[6]
-                if self._hour > 19 and self._hour < 24:
-                    self._daytime = daytimes[7]
-
-
+            # daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
+            daytime_hours_all = [
+                [0, 7, 8, 11, 12, 16, 17, 24], 
+                [0, 5, 6, 11, 12, 18, 19, 24],
+                [0, 4, 5, 11, 12, 20, 21, 24],
+                [0, 5, 6, 11, 12, 18, 19, 24],
+            ]
+    
+            daytime_hours = daytime_hours_all[season_nr]
+            for i in range(len(daytime_hours)):
+                if daytime_hours[i] < self._hour:
+                    continue
+                elif daytime_hours[i] >= self._hour:
+                    self._daytime_nr = i
+                    self._daytime = daytimes[i]
+                    break
+    
+        def add(self, hours, minutes, seconds, milliseconds):
+            delta = datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=milliseconds)
+            self._datetime += delta
+            self.datetimeToClock()
+    
         @property
         def nm(self):
-            name_month = str(months[self.month])
+            name_month = str(months[self._month-1])
             return name_month
         
         @property                       # properting for easy use
         def wk(self):                   # [clk.wk] ---> weekday name
             return self._weekday
-
+    
         @property
         def we(self):
             if self._weekend:
@@ -191,7 +109,7 @@ init python:
             else:
                 weekend = "It's working day"
             return weekend
-
+    
         @property
         def sz(self):
             season = str(self._season)
@@ -221,7 +139,7 @@ init python:
         def hh(self):
             hour = "0" + str(self._hour)
             return hour[-2:] 
-
+    
         @property
         def mm(self): 
             minute = "0" + str(self._minute)
@@ -231,8 +149,7 @@ init python:
         def ss(self):
             second = "0" + str(self._second)
             return second[-2:]
-
-
+    
         @property
         def ms(self):
             millisecond = "000" + str(self._millisecond)
@@ -251,95 +168,59 @@ init python:
     Clouds = ("Sunny", "Slightly Cloudy", "Cloudly", "Overcast" )
     Atmosperics = ("Clear", "Breeze", "Rain", "Storm")
     Temp_list = []
-    Weather_days = ["Today","Tomorrow","2nday","3rday","4tday","5tday","6tday","7tday","8tday","9tday","10tday"] 
+    Weather_days = ["Today","Tomorrow","2nday","3rday","4thday","5thday","6thday","7thday","8thday","9thday","10thday"] 
     
-
+    
     class Weather(Clock):
-        def __init__(self, temp_out):#, wind, cloud, phenomen):
-            self.temp_out = temp_out
-            # self._wind = wind
-            # self._cloud = cloud
-            # self._phenomen = phenomen
+        def __init__(self, year, month, day, hour, minute, second, millisecond):
+            super(Weather, self).__init__(year, month, day, hour, minute, second, millisecond)
+            self.temp_out = None
+            self.wind = None
+            self.cloud = None
+            self.phenomen = None
+            self.change_weather()
         
-        def change_weather(self, temp_out):#, actual_wind, actual_atmospheric, actual_phenomen):
-
-            if self._month == 1:
-                min_temp = -10
-                max_temp = 15
-            elif self._month == 2:
-                min_temp = -8
-                max_temp = 20
-            elif self._month == 3:
-                min_temp = -1
-                max_temp = 23
-            elif self._month == 4:
-                min_temp = 6
-                max_temp = 27
-            elif self._month == 5:
-                min_temp = 10
-                max_temp = 32
-            elif self._month == 6:
-                min_temp = 15
-                max_temp = 36
-            elif self._month == 7:
-                min_temp = 16
-                max_temp = 37
-            elif self._month == 8:
-                min_temp = 16
-                max_temp = 38
-            elif self._month == 9:
-                min_temp = 10
-                max_temp = 30
-            elif self._month == 10:
-                min_temp = 0
-                max_temp = 26
-            elif self._month == 11:
-                min_temp = -5
-                max_temp = 21
-            elif self._month == 12:
-                min_temp = -25
-                max_temp = 15
-            else:
-                min_temp = -256
-                max_temp = 1450
-
-            if len(Temp_list) == 0:
+        def change_weather(self):
+            temp_min_max = [
+                [-256, 1450],
+                [-10, 15],
+                [-8, 20],
+                [-1, 23],
+                [6, 27],
+                [10, 32],
+                [15, 36],
+                [16, 37],
+                [16, 38],
+                [10, 30],
+                [0, 26],
+                [-5, 21],
+                [-25, 15],
+            ]
+            min_temp, max_temp = temp_min_max[self._month]
+    
+            if not Temp_list:
                 while len(Temp_list) < 11:
-                    day_temp = random.randrange(min_temp, max_temp)
+                    day_temp = random.randint(min_temp, max_temp)
                     Temp_list.append(day_temp)
-            elif self._hour == 0:
-                Temp_list.pop[0]
-                day_temp = random.randrange(min_temp, max_temp)
+            else:
+                Temp_list.pop(0)
+                day_temp = random.randint(min_temp, max_temp)
                 Temp_list.append(day_temp)
-            today_temp = Temp_list[0]
-            if self._daytime == daytimes[0]:
-                self.temp_out = today_temp -2 
-            elif self._daytime == daytimes[1]:
-                self.temp_out = today_temp -5
-            elif self._daytime == daytimes[2]:
-                self.temp_out = today_temp -6
-            elif self._daytime == daytimes[3]:
-                self.temp_out = today_temp -3
-            elif self._daytime == daytimes[4]:
-                self.temp_out = today_temp +3
-            elif self._daytime == daytimes[5]:
-                self.temp_out = today_temp +5
-            elif self._daytime == daytimes[6]:
-                self.temp_out = today_temp +2
-            elif self._daytime == daytimes[7]:
-                self.temp_out = today_temp 
+                
+            self.temp_out = Temp_list[0]
+            
         @property
         def temp(self):
-            Temperature = str(self.temp_out)
-            return Temperature
+            actual_temp = self.temp_out
+            temp_daytime_mode = [-2, -5, -6, -3, 3, 5, 2, 0]
+            return str(actual_temp + temp_daytime_mode[self._daytime_nr])
 
-
-
+        def add(self, hours, minutes, seconds, milliseconds):
+            old_day = self._day
+            super(Weather, self).add(hours, minutes, seconds, milliseconds)
+            if old_day != self._day:
+                self.change_weather()
         
-
-
-
-
 
 
 
@@ -348,7 +229,7 @@ init python:
 # |     |                    | |                      #
 #   | |  _ ____   _____ _ __ | |_ ___  _ __ _   _     #
 #   | | | '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |    #
-#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |    #[;/]
+#  _| |_| | | \ V /  __/ | | | || (_) | |  | |_| |    #
 # |_____|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |    #
 #                                            __/ |    #
 #                                           |___/     #
@@ -392,5 +273,4 @@ init python:
 
 
 #def __init__(self, year, m, da, ho, m, s, m,ms)   
-default clk = Clock(2019, 8, 25, 10, 0, 0, 0, "A Day", "An season", "An daytime", " ")
-default wea = Weather(0, )
+default calendar = Weather(2019, 8, 25, 10, 0, 0, 0)
