@@ -13,14 +13,14 @@ label nameMc:
             jump nameMc
     $ p = pn.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[p]...!"
-    "Hmm It is for sure [p]?"
+    "[plr_name]...!"
+    "Hmm It is for sure [plr_name]?"
     menu:
         
-        "Oh! No! It is not [p]":
+        "Oh! No! It is not [plr_name]":
             jump nameMc
-        "Oh! Yes!It is [p]":
-            if turtorial:
+        "Oh! Yes!It is [plr_name]":
+            if tuto:
                 if psn == "":
                     jump surnameMc
                 else:
@@ -29,7 +29,7 @@ label nameMc:
                 jump nameask
     
 label surnameMc:
-    $ psn = renpy.input("So my name is [p] and surname is...", allow=" 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", )
+    $ psn = renpy.input("So my name is [plr_name] and surname is...", allow=" 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", )
     if psn == "":
         "What? An no surname? No no..."
         jump surnameMc
@@ -43,16 +43,16 @@ label surnameMc:
             jump surnameMc
     $ psn = psn.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[p] [ps]...!"
-    "Hmm is for sure [p] [ps]?"
+    "[plr_name] [plr_surname]...!"
+    "Hmm is for sure [plr_name] [plr_surname]?"
     menu:
         
-        "Oh! No! It is not [ps]":
+        "Oh! No! It is not [plr_surname]":
             jump surnameMc
-        "Oh! It is [ps] but not [p]":
+        "Oh! It is [plr_surname] but not [plr_name]":
             jump nameMc
-        "Oh! Yes!It is [p] [ps]":
-            if turtorial:
+        "Oh! Yes!It is [plr_name] [plr_surname]":
+            if tuto:
                 if pal == "":
                     "I have a nickname too and friends always called me by this"
                     jump aliasMc
@@ -77,15 +77,15 @@ label aliasMc:
             jump aliasMc
     $ pal = pal.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[p] [ps] aka [pa]!"
-    if turtorial:
+    "[plr_name] [plr_surname] aka [plr_alias]!"
+    if tuto:
         jump name_chk
     else:
         jump aliasask
     
     label name_chk:
         menu:
-            "Yes i remember. I was always [p] [pa] [ps]":
+            "Yes i remember. I was always [plr_name] [plr_alias] [plr_surname]":
                 jump storytell
             "Nope! My name is not right":
                 jump nameMc
@@ -107,9 +107,9 @@ label storytell:
             jump game
         
         "I wish to see some past":
-            jump turtorial
+            jump tutorial
 
-label turtorial:
+label tutorial:
     "Let me start from begin"
     "My life.."
     "So fucked.."
@@ -152,11 +152,8 @@ label turtorial:
     "Jest jej zal ze zostales sierota"
     "A ona Ci może pomoc"
     "I oczywiscie przypominasz jej ojca ktorego kochała"
-        $ turtorial = True
+    $ tuto = True
     jump nameMc
-
-label continuturt:
-    
 
 
 label game:
@@ -164,12 +161,10 @@ label game:
     scene black
     j "Time to wake up honey <3"
     j "You dont wanna be late"
-    p "What?"
-    scene home_room_bed_lay
-    with dissolve
-    p "Where am i?"
-    p "Oh ok i am in my room"
-    if turtorial:
+    plr_name "What?"
+    plr_name "Where am i?"
+    plr_name "Oh ok i am in my room"
+    if tuto == True:
         jump nameask
     else:
         "But hey?"
@@ -177,40 +172,40 @@ label game:
         jump nameMc
     
     label nameask:
-        j "[p]! Breakfast!"
+        j "[plr_name]! Breakfast!"
         "Oh that lovely voice"
         "Cannot wait to see you"
-        p " I/'m comming!"
+        plr_name " I/'m comming!"
     
     "Meet some dushbags"
     d "How they called you"
-    if turtorial:
-        jump aliasask
+    if tuto == True:
+            jump aliasask
     else:
         jump aliasMc
     
     label aliasask:
-    p "[pa]"
-    p "Get off my way"
-    p "So mr [pa], can go to school"
+    plr_name "[plr_alias]"
+    plr_name "Get off my way"
+    plr_name "So mr [plr_alias], can go to school"
     
     "School"
     t "We have new student"
     t "Introduce yourself"
-    p "Hi I am [p]"
-    t "Just [p] ?"
-    p "No you can call me [pa]"
+    plr_name "Hi I am [plr_name]"
+    t "Just [plr_name] ?"
+    plr_name "No you can call me [plr_alias]"
     t "The question was..."
     t "What is your surname"
-    if turtorial:
-        jump surnameask
+    if tuto == True:
+            jump surnameask
     else:
         jump surnameMc
     
     label surnameask:
-    p "[ps]"
-    p "[p] [ps]"
-    p "aka [pa]!"
+    plr_name "[plr_surname]"
+    plr_name "[plr_name] [plr_surname]"
+    plr_name "aka [plr_alias]!"
 
 
 

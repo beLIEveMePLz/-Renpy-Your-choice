@@ -1,9 +1,10 @@
 #Setting
 
-$turtorial = False 
+
 
 
 init:
+    $ tuto = False 
     $ pn = ""
     $ psn = ""
     $ pal = ""
@@ -55,7 +56,7 @@ label start:
         cr "Where would you begin?"
         menu:
             "Introduction Day":
-                jump story
+                jump storytell
             "Pass turtorials":
                 jump game
             "Change name":
@@ -64,7 +65,4 @@ label start:
 
     
 
-    label game:
-
-        cr " Location manager here"
     
