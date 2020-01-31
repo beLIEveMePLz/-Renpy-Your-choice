@@ -253,17 +253,23 @@ init python:
     #         self.image = image          #11 Obrazek         Bigger thumb 
 
     # class Container():
-    #     def __init__(self, max_size, max_volume, max_weight, spiece, info, image, ):
+    #     def __init__(self, max_size, item_volume, max_volume, max_weight, spiece, info, image, ):
     #         self.inventory = []                 # List for items
-    #         self.max_size = max_size            # 
+    #         self.max_size = max_size 
+           #  self.item_volume =item_volume
     #         self.max_volume = max_volume        # Max amount of total volume of items
     #         self.max_weight = max_weight    
     #         self.spiece = spiece
     #         self.image = image
 
     #     def add(Item):
-    #         pass
-    #         #if max_size == sizes[5]:
+            #  for j in k:
+              #    self.item_volume = self.volume*self.quantity
+
+
+    #         if size <= max_size:
+             #     if self.
+                  
 
 
 
