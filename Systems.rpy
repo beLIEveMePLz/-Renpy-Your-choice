@@ -28,9 +28,9 @@ init python:
     import random
     from math import floor
 
-    weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
-    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     seasons = ["Winter", "Spring", "Summer", "Autumn"]
 
 
@@ -45,6 +45,7 @@ init python:
             self._millisecond= millisecond
             self._weekday = None
             self._season = None
+            self._season_nr = None
             self._daytime = None
             self._daytime_nr = None 
             self._weekend = None
@@ -62,24 +63,20 @@ init python:
         
             __weekday = self._datetime.weekday()
             self._weekday = weekdays[__weekday]
-    
-            if self._weekday in ("Saturday","Sunday"):
-                self._weekend = True
-            else:
-                self._weekend = False
-    
-            season_nr = int(floor((self._month % 12)/3))
-            self._season = seasons[season_nr]
+            self._weekend = __weekday in [5, 6]
             
-            # daytimes = ["Midnight", "Night", "Dawn", "Morning", "Noon", "Afternoon", "Dusk", "Night"]
+            self._season_nr = int(floor((self._month % 12)/3))
+            self._season = seasons[self._season_nr]
+            
             daytime_hours_all = [
-                [0, 7, 8, 11, 12, 16, 17, 24], 
-                [0, 5, 6, 11, 12, 18, 19, 24],
-                [0, 4, 5, 11, 12, 20, 21, 24],
-                [0, 5, 6, 11, 12, 18, 19, 24],
+                # Midnight Night Dawn Morning Noon Afternoon Dusk Night
+                [ 0,       7,    8,   11,     12,  16,       17,  24 ], # Winter
+                [ 0,       5,    6,   11,     12,  18,       19,  24 ], # Spring
+                [ 0,       4,    5,   11,     12,  20,       21,  24 ], # Summer
+                [ 0,       5,    6,   11,     12,  18,       19,  24 ], # Autumn
             ]
     
-            daytime_hours = daytime_hours_all[season_nr]
+            daytime_hours = daytime_hours_all[self._season_nr]
             for i in range(len(daytime_hours)):
                 if daytime_hours[i] < self._hour:
                     continue
@@ -88,18 +85,17 @@ init python:
                     self._daytime = daytimes[i]
                     break
     
-        def add(self, hours, minutes, seconds, milliseconds):
+        def add(self, hours=0, minutes=0, seconds=0, milliseconds=0):
             delta = datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=milliseconds)
             self._datetime += delta
             self.datetimeToClock()
     
         @property
         def nm(self):
-            name_month = str(months[self._month-1])
-            return name_month
+            return months[self._month-1]
         
-        @property                       # properting for easy use
-        def wk(self):                   # [clk.wk] ---> weekday name
+        @property
+        def wk(self):
             return self._weekday
     
         @property
@@ -112,48 +108,39 @@ init python:
     
         @property
         def sz(self):
-            season = str(self._season)
-            return season           
+            return self._season
         
         @property
         def dt(self):
-            daytm = str(self._daytime)
-            return daytm
+            return self._daytime
                      
         @property
         def yy(self): 
-            year = "000" + str(self._year)
-            return year[-4:]        
-              
+            return "{:04d}".format(self._year)
+  
         @property
         def mn(self):
-            month ="00" +str(self._month)
-            return month[-2:]
+            return "{:02d}".format(self._month)
                 
         @property
-        def dd(self): 
-            day = "0" + str(self._day)
-            return day[-2:]
-        
+        def dd(self):
+            return "{:02d}".format(self._day)
+
         @property
         def hh(self):
-            hour = "0" + str(self._hour)
-            return hour[-2:] 
+            return "{:02d}".format(self._hour)
     
         @property
         def mm(self): 
-            minute = "0" + str(self._minute)
-            return minute[-2:]
+            return "{:02d}".format(self._minute)
         
         @property
         def ss(self):
-            second = "0" + str(self._second)
-            return second[-2:]
-    
+            return "{:02d}".format(self._second)
+
         @property
         def ms(self):
-            millisecond = "000" + str(self._millisecond)
-            return millisecond[-4:]
+            return "{:04d}".format(self._millisecond)
 
 # #################################################
 #  _    _            _   _               
@@ -163,10 +150,10 @@ init python:
 # \  /\  /  __/ (_| | |_| | | |  __/ |   
 #  \/  \/ \___|\__,_|\__|_| |_|\___|_|   
 # ################################################
-    Temperatures = ("Freezing", "Cold", "Unconfortable", "Confortable", "Hot", "Scorcher")
-    Winds = ("Without", "Light", "Medium", "Strong", "Hurracane")
-    Clouds = ("Sunny", "Slightly Cloudy", "Cloudly", "Overcast" )
-    Atmosperics = ("Clear", "Breeze", "Rain", "Storm")
+    Temperatures = ["Freezing", "Cold", "Unconfortable", "Confortable", "Hot", "Scorcher"]
+    Winds = ["Without", "Light", "Medium", "Strong", "Hurracane"]
+    Clouds = ["Sunny", "Slightly Cloudy", "Cloudly", "Overcast" ]
+    Atmosperics = ["Clear", "Breeze", "Rain", "Storm"]
     Temp_list = []
     Weather_days = ["Today","Tomorrow","2nday","3rday","4thday","5thday","6thday","7thday","8thday","9thday","10thday"] 
     
@@ -182,19 +169,19 @@ init python:
         
         def change_weather(self):
             temp_min_max = [
-                [-256, 1450],
-                [-10, 15],
-                [-8, 20],
-                [-1, 23],
-                [6, 27],
-                [10, 32],
-                [15, 36],
-                [16, 37],
-                [16, 38],
-                [10, 30],
-                [0, 26],
-                [-5, 21],
-                [-25, 15],
+                [-256, 1450], # else
+                [-10, 15], # Jan
+                [-8, 20], # Feb
+                [-1, 23], # Mar
+                [6, 27], # Apr
+                [10, 32], # May
+                [15, 36], # Jun
+                [16, 37], # Jul
+                [16, 38], # Aug
+                [10, 30], # Sep
+                [0, 26], # Oct
+                [-5, 21], # Nov
+                [-25, 15], # Dec
             ]
             min_temp, max_temp = temp_min_max[self._month]
     
@@ -212,10 +199,14 @@ init python:
         @property
         def temp(self):
             actual_temp = self.temp_out
-            temp_daytime_mode = [-2, -5, -6, -3, 3, 5, 2, 0]
+            
+            temp_daytime_mode = [
+                # Midnight Night Dawn Morning Noon Afternoon Dusk Night
+                  -2,      -5,   -6,  -3,     3,   5,        2,   0
+            ]
             return str(actual_temp + temp_daytime_mode[self._daytime_nr])
 
-        def add(self, hours, minutes, seconds, milliseconds):
+        def add(self, hours=0, minutes=0, seconds=0, milliseconds=0):
             old_day = self._day
             super(Weather, self).add(hours, minutes, seconds, milliseconds)
             if old_day != self._day:
