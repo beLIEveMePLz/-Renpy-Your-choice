@@ -56,5 +56,10 @@ init python:
                 self.current_weight += item_weight_total
                 self.items.append(item)
 
-        def remove(item):
-            pass
+        
+        def remove(Item):
+            self.item_volume = self.volume*self.quantity
+            self.current_volume = self.current_volume-self.item_volume
+            self.item_weight = self.weight*self.quantity
+            self.current_weight = self.current_weight-self.item_weight
+            self.Inventory.pop 
