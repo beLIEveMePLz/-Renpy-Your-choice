@@ -55,9 +55,12 @@ init python:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
                 self.items.append(item)
+                self.quantity += 1
+            
 
         
         def remove(Item):
             left_volume = left_volume + self.current_volume
             left_weight = left_weight + self.current_weight
             self.items.remove(item)
+            self.quantity -=1
