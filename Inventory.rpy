@@ -21,45 +21,40 @@ init python:
             self.size = size            #4 Rozmiar          Amount of volume taken from Container                 (huge, big, medium, small, tiny) huge>big>medium>small>tiny
             self.weight = weight        #5 Ciężar           Strengh(actual_max_weight)=>weight<max weight container
             self.spiece = spiece        #6 Rodzaj           Type of item
-            self.info = info            #7 Informacje       Infos         
+            self.info = info            #7 Informacje       Infos
             self.price = price          #8 Cena             Price
             self.craft = craft          #9 Tworzenie        Crafting
             self.thumb = thumb          #10 Miniaturka      Thumbinal
-            self.image = image          #11 Obrazek         Bigger thumb 
+            self.image = image          #11 Obrazek         Bigger thumb
 
     class Container():
-        def __init__(self, max_size, item_volume, current_volume, max_volume, item_weight, current_weight, max_weight, spiece, info, image, ):
-            
-            super(Item, self).__init__(quantity, volume, size, weight)
-            self.max_size = max_size 
-            self.item_volume = item_volume
-            self.current_volume = current_volume
+        def __init__(self, max_size, max_volume, max_weight, spiece, info, image):
+            self.items = []
+            self.max_size = max_size
             self.max_volume = max_volume         #Max amount of total volume of items
-            self.item_weight = item_weight
-            self.current_weight = current_weight
             self.max_weight = max_weight
-            self.current_quantity = current_quantity
+            self.current_volume = 0
+            self.current_weight = 0
             self.spiece = spiece
+            self.info = info
             self.image = image
 
-        def add(Item):
-            self.item_volume + self.volume*self.quantity
-            self.current_volume = self.current_volume+self.item_volume
-            self.item_weight + self.weight*self.quantity
-            self.current_weight = self.current_weight+self.item_weight
-            
-            if size > max_size:
+        def add(item):
+            left_volume = self.max_volume - self.current_volume
+            left_weight = self.max_weight - self.current_weight
+            item_volume_total =  item.volume * item.quantity
+            item_weight_total =  item.weight * item.quantity
+
+            if item.size > self.max_size:
                 "This will not fit"
-            elif self.current_volume > self.max_volume:
-                self.current_volume = self.current_volume-self.item_volume
+            elif item_volume_total > left_volume:
                 "This is too big"
-            elif self.current_weight > self.max_weight:
-                self.current_weight = self.current_weight-self.item_weight
+            elif item_weight_total > left_weight:
                 "This is too heavy"
             else:
-                self.current_volume = self.current_volume+self.item_volume
-                self.current_weight = self.current_weight+self.item_weight
-                self.current_quantity = self.quantity + self.current_quantity
-                self.Inventory.append
-        
-        def remove(Item):
+                self.current_volume += item_volume_total
+                self.current_weight += item_weight_total
+                self.items.append(item)
+
+        def remove(item):
+            pass
