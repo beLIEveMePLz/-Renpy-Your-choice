@@ -28,8 +28,9 @@ init python:
             self.image = image          #11 Obrazek         Bigger thumb 
 
     class Container():
-        def __init__(self, max_size, item_volume, max_volume, max_weight, spiece, info, image, ):
+        def __init__(self, max_size, item_volume, current_volume, max_volume, item_weight, current_weight, max_weight, spiece, info, image, ):
             
+            super(Item, self).__init__(quantity, volume, size, weight)
             self.max_size = max_size 
             self.item_volume = item_volume
             self.current_volume = current_volume
@@ -60,3 +61,5 @@ init python:
                 self.current_weight = self.current_weight+self.item_weight
                 self.current_quantity = self.quantity + self.current_quantity
                 self.Inventory.append
+        
+        def remove(Item):
