@@ -43,9 +43,9 @@ init python:
             self.image = image
 
         def add(Item):
-            self.item_volume + self.volume*self.quantity
+            self.item_volume = self.volume*self.quantity
             self.current_volume = self.current_volume+self.item_volume
-            self.item_weight + self.weight*self.quantity
+            self.item_weight = self.weight*self.quantity
             self.current_weight = self.current_weight+self.item_weight
             
             if size > max_size:
@@ -63,3 +63,8 @@ init python:
                 self.Inventory.append
         
         def remove(Item):
+            self.item_volume = self.volume*self.quantity
+            self.current_volume = self.current_volume-self.item_volume
+            self.item_weight = self.weight*self.quantity
+            self.current_weight = self.current_weight-self.item_weight
+            self.Inventory.pop 
