@@ -57,21 +57,23 @@ init python:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
                 self.items.append(item)
-                countin_items(item)
-
-        def countin_items(item):
-            Items = self.items.sort()
-            for item in Items:
-                if Items.count(item) > 1:
-                    Item.quantity += 1
-                else:
-                    Item.quantity = 1
+                Items = self.items.sort()
+                for item in Items:
+                    if Items.count(item) > 1:
+                        Item.quantity += 1
+                    else:
+                        Item.quantity = 1
 
         def remove(item):
-            left_volume += self.current_volume
-            left_weight += self.current_weight
+            self.left_volume += item_volume_total
+            self.left_weight += item_weight_total                
             self.current_volume -= item_volume_total
             self.current_weight -= item_weight_total
-            self.items.remove(item)
-            self.quantity -=1
-            countin_items()
+            if Items.count(item) >1:
+                self.quantity -=1
+            else:
+                self.items.remove(item)
+
+        def check_amount(item)
+            for Item in items:
+                return self.quantity
