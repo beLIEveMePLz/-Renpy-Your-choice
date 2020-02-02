@@ -55,9 +55,7 @@ init python:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
                 self.items.append(item)
-                count(item)
-                                
-                    
+                count(item)                    
 
         def count(self, item):
             Items = self.items.sort()
@@ -66,12 +64,8 @@ init python:
                     Item.quantity += 1
                 else:
                     Item.quantity = 1
-
-
         
         def remove(Item):
-            
-
             left_volume += self.current_volume
             left_weight += self.current_weight
             self.current_volume -= item_volume_total
