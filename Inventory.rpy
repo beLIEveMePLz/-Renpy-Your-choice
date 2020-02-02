@@ -40,35 +40,38 @@ init python:
             self.image = image
 
         def add(item):
-            left_volume = self.max_volume - self.current_volume
-            left_weight = self.max_weight - self.current_weight
+            self.left_volume = self.max_volume - self.current_volume
+            self.left_weight = self.max_weight - self.current_weight
             item_volume_total =  item.volume * item.quantity
             item_weight_total =  item.weight * item.quantity
 
             if item.size > self.max_size:
                 "This will not fit"
-            elif item_volume_total > left_volume:
+            elif item_volume_total > self.left_volume:
                 "This is too big"
-            elif item_weight_total > left_weight:
+            elif item_weight_total > self.left_weight:
                 "This is too heavy"
             else:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
                 self.items.append(item)
+                count(item)
                                 
                     
 
         def count(self, item):
             Items = self.items.sort()
             for item in Items:
-                if items.count(item) > 1:
-                    Item.quantity += int(items.count(item))
-                else:
+                if Items.count(item) > 1:
                     Item.quantity += 1
+                else:
+                    Item.quantity = 1
 
 
         
         def remove(Item):
+            
+
             left_volume += self.current_volume
             left_weight += self.current_weight
             self.current_volume -= item_volume_total
