@@ -77,3 +77,7 @@ init python:
         def check_amount(item):
             for Item in items:
                 return self.quantity
+
+        @property
+        def function():
+            pass
