@@ -34,7 +34,9 @@ init python:
             self.max_volume = max_volume         #Max amount of total volume of items
             self.max_weight = max_weight
             self.current_volume = 0
+            self.left_volume = left_volume
             self.current_weight = 0
+            self.left_weight = left_weight
             self.spiece = spiece
             self.info = info
             self.image = image
@@ -55,20 +57,21 @@ init python:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
                 self.items.append(item)
-                count(item)                    
+                countin_items(item)
 
-        def count(self, item):
+        def countin_items(item):
             Items = self.items.sort()
             for item in Items:
                 if Items.count(item) > 1:
                     Item.quantity += 1
                 else:
                     Item.quantity = 1
-        
-        def remove(Item):
+
+        def remove(item):
             left_volume += self.current_volume
             left_weight += self.current_weight
             self.current_volume -= item_volume_total
             self.current_weight -= item_weight_total
             self.items.remove(item)
             self.quantity -=1
+            countin_items()
