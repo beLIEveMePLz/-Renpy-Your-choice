@@ -10,11 +10,11 @@
 #                                                     #
 #######################################################
 init python:
-    sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
+    Sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
     Inventory = []
 
     class Item(object):
-        def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image):
+        def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image, value):
             self.name = name            #1 Nazwa            Name of item for identification purpose
             self.quantity = quantity    #2 Ilość            Amount of items we have                               Ex. 15xbatteries
             self.volume = volume        #3 Objetosc         Amount of volume taken from Container                 all items(volume)<=max_volume
@@ -26,6 +26,7 @@ init python:
             self.craft = craft          #9 Tworzenie        Crafting
             self.thumb = thumb          #10 Miniaturka      Thumbinal
             self.image = image          #11 Obrazek         Bigger thumb
+            self.value = value
 
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image):
@@ -40,6 +41,7 @@ init python:
             self.spiece = spiece
             self.info = info
             self.image = image
+            sizes()
 
         def add(item):
             self.left_volume = self.max_volume - self.current_volume
@@ -78,6 +80,19 @@ init python:
             for Item in items:
                 return self.quantity
 
+        def sizes(item):
+            if self.size == 4:
+                return Sizes[4]
+            elif self.size == 3
+                return Sizes[3]
+            elif self.size == 2
+                return Sizes[2]
+            elif self.size == 1
+                return Sizes[1]
+            elif self.size == 0
+                return Sizes[0]
+            else:
+                RaiseError("The size is forbidden")
+
         @property
-        def function():
-            pass
+        
