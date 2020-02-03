@@ -10,9 +10,8 @@
 #                                                     #
 #######################################################
 init python:
-    Sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
-    Inventory = []
-
+    sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
+    
     class Item(object):
         def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image, value):
             self.name = name            #1 Nazwa            Name of item for identification purpose
@@ -41,9 +40,9 @@ init python:
             self.spiece = spiece
             self.info = info
             self.image = image
-            sizes()
+            self.sizecount()
 
-        def add(item):
+        def add(self, item):
             self.left_volume = self.max_volume - self.current_volume
             self.left_weight = self.max_weight - self.current_weight
             item_volume_total =  item.volume * item.quantity
@@ -58,15 +57,13 @@ init python:
             else:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
-                Items = self.items.sort()
-                for item in Items:
-                    if Items.count(item) > 1:
-                        Item.quantity += 1
-                    else:
-                        self.items.append(item)
-                        Item.quantity = 1
+                if items.count(item) > 1:
+                    Item.quantity += 1
+                else:
+                    self.items.append(item)
+                    Item.quantity = 1
 
-        def remove(item):
+        def remove(self,item):
             self.left_volume += item_volume_total
             self.left_weight += item_weight_total                
             self.current_volume -= item_volume_total
@@ -76,23 +73,8 @@ init python:
             else:
                 self.items.remove(item)
 
-        def check_amount(item):
-            for Item in items:
-                return self.quantity
-
-        def sizes(item):
-            if self.size == 4:
-                return Sizes[4]
-            elif self.size == 3
-                return Sizes[3]
-            elif self.size == 2
-                return Sizes[2]
-            elif self.size == 1
-                return Sizes[1]
-            elif self.size == 0
-                return Sizes[0]
-            else:
-                RaiseError("The size is forbidden")
+        def sizecount(item):
+            return sizes[self.size]
 
         @property
         
