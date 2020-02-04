@@ -29,7 +29,7 @@ init python:
 
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image):
-            self.items = []
+            self.items = {}
             self.max_size = max_size
             self.max_volume = max_volume         #Max amount of total volume of items
             self.max_weight = max_weight
@@ -41,6 +41,23 @@ init python:
             self.info = info
             self.image = image
             self.sizecount()
+    
+        def __iter__(self):
+            return iter(self.items.items())
+    
+        def __len__(self):
+            return len(self.items)
+    
+        def __contains__(self, item):
+            return item.name in self.items
+    
+        def __getitem__(self, item):
+            return self.items[item.name]
+    
+        def __setitem__(self, item, value):
+            self.items[item.name] = value
+            return self[item]
+
 
         def add(self, item):
             self.left_volume = self.max_volume - self.current_volume
@@ -49,21 +66,21 @@ init python:
             item_weight_total =  item.weight * item.quantity
 
             if item.size > self.max_size:
-                "This will not fit"
+                return False, "This will not fit"
             elif item_volume_total > self.left_volume:
-                "This is too big"
+                return False, "This is too big"
             elif item_weight_total > self.left_weight:
-                "This is too heavy"
+                return False, "This is too heavy"
             else:
                 self.current_volume += item_volume_total
                 self.current_weight += item_weight_total
-                if items.count(item) > 1:
-                    Item.quantity += 1
+                if item in self:
+                    self[item].quantity += 1
                 else:
-                    self.items.append(item)
-                    Item.quantity = 1
+                    self[item] = item
+                return True, "ok"
 
-        def remove(self,item):
+        def remove(self, item):
             self.left_volume += item_volume_total
             self.left_weight += item_weight_total                
             self.current_volume -= item_volume_total
@@ -73,8 +90,8 @@ init python:
             else:
                 self.items.remove(item)
 
-        def sizecount(item):
-            return sizes[self.size]
+        def sizecount(self):
+            return sizes[self.max_size]
 
         #@property
         

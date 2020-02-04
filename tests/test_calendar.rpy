@@ -134,5 +134,5 @@ init python:
             self.assertTrue(date_ok)
 
 
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestClock)
-    unittest.TextTestRunner().run(suite)    
+    #suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestClock)
+    #unittest.TextTestRunner().run(suite)    
