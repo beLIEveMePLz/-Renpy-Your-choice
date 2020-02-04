@@ -81,14 +81,16 @@ init python:
                 return True, "ok"
 
         def remove(self, item):
-            self.left_volume += item_volume_total
-            self.left_weight += item_weight_total                
+            item_volume_total =  item.volume # * item.quantity
+            item_weight_total =  item.weight # * item.quantity
+            self.left_volume += self.current_volume
+            self.left_weight += self.current_weight
             self.current_volume -= item_volume_total
             self.current_weight -= item_weight_total
-            if Items.count(item) >1:
-                self.quantity -=1
+            if self[item].quantity > 1:
+                self[item].quantity -= 1
             else:
-                self.items.remove(item)
+                del self.items[item.name]
 
         def sizecount(self):
             return sizes[self.max_size]
