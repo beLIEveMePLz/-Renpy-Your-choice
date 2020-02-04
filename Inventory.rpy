@@ -76,5 +76,5 @@ init python:
         def sizecount(item):
             return sizes[self.size]
 
-        @property
+        #@property
         

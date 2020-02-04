@@ -34,7 +34,7 @@ init python:
 
 
     class Clock(object):
-        def __init__(self, year, month, day, hour, minute, second, millisecond):
+        def __init__(self, year, month, day, hour=0, minute=0, second=0, millisecond=0):
             self._year = year 
             self._month = month 
             self._day = day 
