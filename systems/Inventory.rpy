@@ -27,6 +27,15 @@ init python:
             self.image = image          #11 Obrazek         Bigger thumb
             self.value = value
 
+    class Consumable(Item):
+        def __init__(self, name, quantity, image):
+            super().__init__(self, name, quantity, image)
+            self.thirst_loss = thirst_loss
+            self.hunger_loss = hunger_loss
+
+        def use(self, target):
+            
+
     class Eqquipable(Item):
         def __init__(self, name, weight, image):
             super().__init__(self, name, weight, image)
