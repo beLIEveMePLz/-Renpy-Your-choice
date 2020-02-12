@@ -13,13 +13,13 @@ label nameMc:
             jump nameMc
     $ p = pn.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[plr_name]...!"
-    "Hmm It is for sure [plr_name]?"
+    "[plr]...!"
+    "Hmm It is for sure [plr]?"
     menu:
         
-        "Oh! No! It is not [plr_name]":
+        "Oh! No! It is not [plr]":
             jump nameMc
-        "Oh! Yes!It is [plr_name]":
+        "Oh! Yes!It is [plr]":
             if intro:
                 if psn == "":
                     jump surnameMc
@@ -29,7 +29,7 @@ label nameMc:
                 jump nameask
     
 label surnameMc:
-    $ psn = renpy.input("So my name is [plr_name] and surname is...", allow=" 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", )
+    $ psn = renpy.input("So my name is [plr] and surname is...", allow=" 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", )
     if psn == "":
         "What? An no surname? No no..."
         jump surnameMc
@@ -43,15 +43,15 @@ label surnameMc:
             jump surnameMc
     $ psn = psn.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[plr_name] [plr_surname]...!"
-    "Hmm is for sure [plr_name] [plr_surname]?"
+    "[plr] [plr_surname]...!"
+    "Hmm is for sure [plr] [plr_surname]?"
     menu:
         
         "Oh! No! It is not [plr_surname]":
             jump surnameMc
-        "Oh! It is [plr_surname] but not [plr_name]":
+        "Oh! It is [plr_surname] but not [plr]":
             jump nameMc
-        "Oh! Yes!It is [plr_name] [plr_surname]":
+        "Oh! Yes!It is [plr] [plr_surname]":
             if intro:
                 if pal == "":
                     "I have a nickname too and friends always called me by this"
@@ -77,7 +77,7 @@ label aliasMc:
             jump aliasMc
     $ pal = pal.title()
     # Yay, your name doesn't hit any conditions. You can name them that!
-    "[plr_name] [plr_surname] aka [plr_alias]!"
+    "[plr] [plr_surname] aka [plr_alias]!"
     if intro:
         jump name_chk
     else:
@@ -85,7 +85,7 @@ label aliasMc:
     
     label name_chk:
         menu:
-            "Yes i remember. I was always [plr_name] [plr_alias] [plr_surname]":
+            "Yes i remember. I was always [plr] [plr_alias] [plr_surname]":
                 jump storytell
             "Nope! My name is not right":
                 jump nameMc
@@ -139,9 +139,9 @@ label game:
     scene black
     j "Time to wake up honey <3"
     j "You dont wanna be late"
-    plr_name "What?"
-    plr_name "Where am i?"
-    plr_name "Oh ok i am in my room"
+    plr "What?"
+    plr "Where am i?"
+    plr "Oh ok i am in my room"
     if intro == True:
         jump nameask
     else:
@@ -150,29 +150,15 @@ label game:
         jump nameMc
     
     label nameask:
-        j "[plr_name]! Breakfast!"
+        j "[plr]! Breakfast!"
         "Oh that lovely voice"
         "Cannot wait to see you"
-        plr_name " I'm comming!"
+        plr " I'm comming!"
     
     "Meet some dushbags"
     d "How they called you"
     if intro == True:
-            jump aliasask
-    else:
-        jump aliasMc
-    
-    label aliasask:
-    plr_name "[plr_alias]"
-    plr_name "Get off my way"
-    plr_name "So mr [plr_alias], can go to school"
-    
-    "School"
-    t "We have new student"
-    t "Introduce yourself"
-    plr_name "Hi I am [plr_name]"
-    t "Just [plr_name] ?"
-    plr_name "No you can call me [plr_alias]"
+    plr "No you can call me [plr_alias]"
     t "The question was..."
     t "What is your surname"
     if intro == True:
@@ -181,9 +167,9 @@ label game:
         jump surnameMc
     
     label surnameask:
-    plr_name "[plr_surname]"
-    plr_name "[plr_name] [plr_surname]"
-    plr_name "aka [plr_alias]!"
+    plr "[plr_surname]"
+    plr "[plr] [plr_surname]"
+    plr "aka [plr_alias]!"
 
 
 

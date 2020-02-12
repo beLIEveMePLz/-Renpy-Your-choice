@@ -27,6 +27,20 @@ init python:
             self.image = image          #11 Obrazek         Bigger thumb
             self.value = value
 
+    class Eqquipable(Item):
+        def __init__(self, name, weight, image):
+            super().__init__(self, name, weight, image)
+            self.is_equipped = False
+            self.equipped_to = None
+
+        def equip(self, target):
+            self.is_equipped = True
+            self.equipped_to = target
+
+        def unequip(self, target):
+            self.is_equipped = False
+            self.equipped_to = None
+
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image):
             self.items = {}
@@ -94,6 +108,8 @@ init python:
 
         def sizecount(self):
             return sizes[self.max_size]
+
+
 
 
 

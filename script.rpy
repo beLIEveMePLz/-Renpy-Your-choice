@@ -12,7 +12,7 @@ init:
 #Characters
 
 
-define plr_name = DynamicCharacter("pn", color="#fd9501") 
+define plr = DynamicCharacter("pn", color="#fd9501") 
 
 define plr_surname = DynamicCharacter("psn")
 define plr_alias = DynamicCharacter("pal")
