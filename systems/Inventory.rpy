@@ -13,7 +13,8 @@ init python:
     sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
     
     class Item(object):
-        """docstring for Item
+        """Item
+        Item has few simple properties
         """
         def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image, value):
             self.name = name            #1 Nazwa            Name of item for identification purpose
@@ -31,6 +32,9 @@ init python:
             self.remained = remained    #13 Własna zawartość np 1000ml mleka
 
     class Consumable(Item):
+        '''
+        For consume purposes 
+        '''
         def __init__(self, name, quantity, image):
             super().__init__(self, name, quantity, remained, image)
             self.thirst_loss = thirst_loss
@@ -44,7 +48,8 @@ init python:
             target.lossthirst(self.thirst)
             target.losshunger(self.hunger)
 
-    class Eqquipable(Item):
+    class Equipable(Item):
+        ''' wearable items like tshirt'''
         def __init__(self, name, weight, image):
             super().__init__(self, name, weight, image)
             self.is_equipped = False
@@ -57,6 +62,21 @@ init python:
         def unequip(self, target):
             self.is_equipped = False
             self.equipped_to = None
+
+    class Tool(object):
+        """eqquippable and usable item important for quests"""
+        def __init__(self, uses):
+            super(Tool, self).__init__(self, name, weight, image)
+            self.uses = uses
+            self.tool_type = tool_type
+
+        def equip(self, target):
+            Equipable.equip(self, target)
+            target.equip_tool(self)
+
+        def unequip():
+            self.equipped_to.unequip_tool()
+            Equipable.unequip(self)            
 
     class Container():
         def __init__(self, max_size, max_volume, max_weight, spiece, info, image):

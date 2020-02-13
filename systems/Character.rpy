@@ -6,7 +6,7 @@ init python:
             self.maxhunger= maxhunger
             self.thirst = 0
             self.maxrhirst = maxrhirst
-            self.strengh = strengh
+            self.strengh = strengh 
             self.stamina = stamina
             self.speed = speed
             self.focus = focus
@@ -33,6 +33,12 @@ init python:
             self.hunger -= amount
             if self.hunger <= 0:
                 self.hunger = 0
+
+        def equip_tool(tool):
+            if self.tool != None:
+                self.unequip_tool()
+            self.tool = tool
+            
 
 
 
