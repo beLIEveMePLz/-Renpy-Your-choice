@@ -13,6 +13,8 @@ init python:
     sizes = ("Tiny", "Small", "Medium", "Big", "Huge")
     
     class Item(object):
+        """docstring for Item
+        """
         def __init__(self, name, quantity, volume, size, weight, spiece, info, price, craft, thumb, image, value):
             self.name = name            #1 Nazwa            Name of item for identification purpose
             self.quantity = quantity    #2 Ilość            Amount of items we have                               Ex. 15xbatteries
@@ -25,16 +27,22 @@ init python:
             self.craft = craft          #9 Tworzenie        Crafting
             self.thumb = thumb          #10 Miniaturka      Thumbinal
             self.image = image          #11 Obrazek         Bigger thumb
-            self.value = value
+            self.value = value          #12 Cena
+            self.remained = remained    #13 Własna zawartość np 1000ml mleka
 
     class Consumable(Item):
         def __init__(self, name, quantity, image):
-            super().__init__(self, name, quantity, image)
+            super().__init__(self, name, quantity, remained, image)
             self.thirst_loss = thirst_loss
             self.hunger_loss = hunger_loss
 
-        def use(self, target):
-            
+        def use(self, target, amount):
+            if self.remained > 0:
+                self.remained -= amount
+            else:
+                items.remove(Item)            
+            target.lossthirst(self.thirst)
+            target.losshunger(self.hunger)
 
     class Eqquipable(Item):
         def __init__(self, name, weight, image):
